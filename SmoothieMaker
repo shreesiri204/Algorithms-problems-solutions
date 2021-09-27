@@ -1,0 +1,40 @@
+package practice;
+
+import java.util.Arrays;
+import java.util.HashMap;
+
+
+public class SmoothieMaker {
+	static HashMap<String, String[]> menu;
+
+	public static void main(String[] args) {
+		menu = new HashMap<String, String[]>();
+		menu.put("smoothie1", new String[] { "ing1", "ing2", "ing3", "ing4" });
+		menu.put("smoothie2", new String[] { "ing2", "ing4", "ing5" });
+		menu.put("smoothie3", new String[] { "ing1", "ing2", "ing5" });
+
+		System.out.println(getIngredientsList("smoothie1-ing3,ing2"));
+
+	}
+
+	public static boolean stringContainsItemFromList(String inputStr, String[] items) {
+		return Arrays.stream(items).anyMatch(inputStr::contains);
+	}
+
+	private static String getIngredientsList(String order) {
+		StringBuilder ingredients = new StringBuilder();
+		String menuItem = order.substring(0, order.indexOf('-'));
+		String[] omitIngredients = order.substring(order.indexOf('-') + 1).split(",");
+		String[] ingredientsList = menu.get(menuItem);
+		for (String s : ingredientsList) {
+			if (!stringContainsItemFromList(s, omitIngredients))
+				if (ingredients.length() == 0)
+					ingredients.append(s);
+				else
+					ingredients.append(" " + s);
+		}
+
+		return ingredients.toString();
+	}
+
+}
